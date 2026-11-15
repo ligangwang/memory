@@ -5,12 +5,15 @@ import { Ladder } from "./ladder-game";
 import { Practice, type Mode } from "./practice";
 
 type Tab = "ladder" | Mode;
-const TABS: [Tab, string][] = [
-  ["ladder", "Memory Ladder"],
+// Memory Ladder is the game you play for a score; the three labs are
+// practice for the Major System, with no score.
+const PLAY: [Tab, string][] = [["ladder", "Memory Ladder"]];
+const PRACTICE: [Tab, string][] = [
   ["number", "Numbers"],
   ["word", "Words"],
   ["card", "Cards"],
 ];
+const TABS = [...PLAY, ...PRACTICE];
 const isTab = (v: unknown): v is Tab => TABS.some(([id]) => id === v);
 /** A tab named in the address (#number), as dingn's old links to each lab. */
 const fromHash = () => {
@@ -27,11 +30,34 @@ export function MemoryApp({ initialTab }: { initialTab?: Tab }) {
   }, [tab]);
   return (
     <div className="memory-app container mind-page">
-      <nav className="memory-tabs digit-tabs" aria-label={t("Memory games")}>
-        {TABS.map(([id, label]) => (
-          <button key={id} aria-pressed={tab === id} onClick={() => setTab(id)}>
-            {t(label)}
-          </button>
+      <nav className="memory-tabs" aria-label={t("Memory games")}>
+        {(
+          [
+            ["Play", "For a score, coins and badges", PLAY],
+            ["Practice", "Learn the Major System, no score", PRACTICE],
+          ] as const
+        ).map(([group, hint, tabs]) => (
+          <div
+            key={group}
+            className={`tab-group tab-group-${group.toLowerCase()}`}
+            role="group"
+            aria-label={t(group)}
+          >
+            <p className="tab-group-label">
+              <strong>{t(group)}</strong> <span>{t(hint)}</span>
+            </p>
+            <div className="digit-tabs">
+              {tabs.map(([id, label]) => (
+                <button
+                  key={id}
+                  aria-pressed={tab === id}
+                  onClick={() => setTab(id)}
+                >
+                  {t(label)}
+                </button>
+              ))}
+            </div>
+          </div>
         ))}
       </nav>
       {tab === "ladder" ? <Ladder /> : <Practice key={tab} mode={tab} />}

@@ -1,13 +1,13 @@
 {
   "id": "memory",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "title": {
     "en": "Memory",
     "zh": "记忆"
   },
   "description": {
-    "en": "Train your memory: climb Memory Ladder up to 20 digits, and practice the Major System with numbers, words and playing cards.",
-    "zh": "训练记忆力：在记忆阶梯上一路记到 20 位数字，并用数字、单词和扑克牌练习数字编码法。"
+    "en": "Play Memory Ladder for coins and badges, climbing up to 20 digits, then practice the Major System with numbers, words and playing cards.",
+    "zh": "玩记忆阶梯赢金币和徽章，一路记到 20 位数字；再用数字、单词和扑克牌练习数字编码法。"
   },
   "entry": "index.html",
   "badges": [

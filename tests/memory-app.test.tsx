@@ -90,6 +90,18 @@ test("opens on Memory Ladder and offers all four games", () => {
   expect(screen.getByText("PLAY WITHOUT SIGNING IN")).toBeTruthy();
 });
 
+test("keeps the ladder under Play and the labs under Practice", () => {
+  const { sdk } = fakeSdk(false);
+  show(sdk);
+  const play = screen.getByRole("group", { name: "Play" });
+  const practice = screen.getByRole("group", { name: "Practice" });
+  expect(play.textContent).toContain("Memory Ladder");
+  expect(play.textContent).not.toContain("Numbers");
+  for (const name of ["Numbers", "Words", "Cards"])
+    expect(practice.textContent).toContain(name);
+  expect(practice.textContent).toContain("no score");
+});
+
 test("the number lab reveals words and saves a favorite to the account", async () => {
   const { sdk, raw } = fakeSdk(true);
   show(sdk);
