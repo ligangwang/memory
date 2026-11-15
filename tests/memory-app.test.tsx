@@ -1,6 +1,7 @@
 import React from "react";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
 import {
+  act,
   cleanup,
   fireEvent,
   render,
@@ -11,6 +12,8 @@ import type { DingnGame, Json, Locale } from "../sdk/dingn-sdk.js";
 import { DingnProvider } from "../src/dingn";
 import { MemoryProvider } from "../src/memory-state";
 import { MemoryApp } from "../src/app";
+import { cardDecks } from "../src/card-ladder.mjs";
+import { deck } from "../src/library";
 
 const DATA: Record<string, unknown> = {
   "index.json": { numbers: 3, words: { s: 1, t: 1 } },
@@ -59,7 +62,9 @@ function fakeSdk(signedIn: boolean, locale: Locale = "en") {
 const show = (sdk: DingnGame) =>
   render(
     <DingnProvider sdk={sdk}>
-      <MemoryProvider initial={{ best: 0, favorites: {} }}>
+      <MemoryProvider
+        initial={{ best: 0, cards: 0, cardRun: 0, favorites: {} }}
+      >
         <MemoryApp />
       </MemoryProvider>
     </DingnProvider>,
@@ -81,21 +86,28 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
-test("opens on Memory Ladder and offers all four games", () => {
+test("opens on Number Ladder and offers all five tabs", () => {
   const { sdk } = fakeSdk(false);
   show(sdk);
-  for (const name of ["Memory Ladder", "Numbers", "Words", "Cards"])
+  for (const name of [
+    "Number Ladder",
+    "Card Ladder",
+    "Numbers",
+    "Words",
+    "Cards",
+  ])
     expect(screen.getByRole("button", { name })).toBeTruthy();
   expect(screen.getByRole("button", { name: "Start climbing →" })).toBeTruthy();
   expect(screen.getByText("PLAY WITHOUT SIGNING IN")).toBeTruthy();
 });
 
-test("keeps the ladder under Play and the labs under Practice", () => {
+test("keeps the ladders under Play and the labs under Practice", () => {
   const { sdk } = fakeSdk(false);
   show(sdk);
   const play = screen.getByRole("group", { name: "Play" });
   const practice = screen.getByRole("group", { name: "Practice" });
-  expect(play.textContent).toContain("Memory Ladder");
+  expect(play.textContent).toContain("Number Ladder");
+  expect(play.textContent).toContain("Card Ladder");
   expect(play.textContent).not.toContain("Numbers");
   for (const name of ["Numbers", "Words", "Cards"])
     expect(practice.textContent).toContain(name);
@@ -114,6 +126,8 @@ test("the number lab reveals words and saves a favorite to the account", async (
   await waitFor(() =>
     expect(raw.progress.save).toHaveBeenCalledWith({
       best: 0,
+      cards: 0,
+      cardRun: 0,
       favorites: { "0": "sea" },
     }),
   );
@@ -134,6 +148,8 @@ test("a signed-out player keeps favorites on the device", async () => {
   await waitFor(() =>
     expect(device.get("memory")).toEqual({
       best: 0,
+      cards: 0,
+      cardRun: 0,
       favorites: { "0": "zoo" },
     }),
   );
@@ -186,6 +202,43 @@ test("a finished climb pays coins and saves the best", async () => {
   fireEvent.click(await screen.findByRole("button", { name: "See results →" }));
   await screen.findByText("+1 dingn coins");
   expect(raw.rewards.earn).toHaveBeenCalledWith(1);
-  expect(raw.progress.save).toHaveBeenCalledWith({ best: 3, favorites: {} });
+  expect(raw.progress.save).toHaveBeenCalledWith({
+    best: 3,
+    cards: 0,
+    cardRun: 0,
+    favorites: {},
+  });
   vi.useRealTimers();
+});
+
+test("Card Ladder deals a deck one card at a time and checks the order", async () => {
+  // crypto returning 0 makes the shuffle predictable.
+  vi.stubGlobal("crypto", {
+    getRandomValues: (a: Uint32Array) => a.fill(0),
+  });
+  vi.useFakeTimers();
+  try {
+    const order = cardDecks(
+      deck.map((c) => c.id),
+      () => 0,
+    )[0];
+    const name = (id: string) => deck.find((c) => c.id === id)!.name;
+    const { sdk } = fakeSdk(false);
+    show(sdk);
+    fireEvent.click(screen.getByRole("button", { name: "Card Ladder" }));
+    fireEvent.click(screen.getByRole("button", { name: "Deal the cards →" }));
+    expect(screen.getByRole("img", { name: name(order[0]) })).toBeTruthy();
+    await act(async () => void vi.advanceTimersByTime(5100));
+    expect(screen.getByRole("img", { name: name(order[1]) })).toBeTruthy();
+    await act(async () => void vi.advanceTimersByTime(52 * 5000));
+    expect(screen.getByText("Which card was number 1?")).toBeTruthy();
+    fireEvent.click(screen.getByRole("button", { name: name(order[0]) }));
+    fireEvent.click(screen.getByRole("button", { name: name(order[1]) }));
+    expect(screen.getByText("Which card was number 3?")).toBeTruthy();
+    fireEvent.click(screen.getByRole("button", { name: name(order[5]) }));
+    expect(screen.getByText("A miss, not the end.")).toBeTruthy();
+    expect(screen.getByText(/^2 cards in a row\./)).toBeTruthy();
+  } finally {
+    vi.useRealTimers();
+  }
 });

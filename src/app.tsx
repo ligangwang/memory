@@ -2,12 +2,16 @@
 import { useEffect, useState } from "react";
 import { useDingn, useLocale } from "./dingn";
 import { Ladder } from "./ladder-game";
+import { CardLadder } from "./card-ladder-game";
 import { Practice, type Mode } from "./practice";
 
-type Tab = "ladder" | Mode;
-// Memory Ladder is the game you play for a score; the three labs are
+type Tab = "ladder" | "card-ladder" | Mode;
+// The two ladders are the games you play for a score; the three labs are
 // practice for the Major System, with no score.
-const PLAY: [Tab, string][] = [["ladder", "Memory Ladder"]];
+const PLAY: [Tab, string][] = [
+  ["ladder", "Number Ladder"],
+  ["card-ladder", "Card Ladder"],
+];
 const PRACTICE: [Tab, string][] = [
   ["number", "Numbers"],
   ["word", "Words"],
@@ -60,7 +64,13 @@ export function MemoryApp({ initialTab }: { initialTab?: Tab }) {
           </div>
         ))}
       </nav>
-      {tab === "ladder" ? <Ladder /> : <Practice key={tab} mode={tab} />}
+      {tab === "ladder" ? (
+        <Ladder />
+      ) : tab === "card-ladder" ? (
+        <CardLadder />
+      ) : (
+        <Practice key={tab} mode={tab} />
+      )}
     </div>
   );
 }

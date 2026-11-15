@@ -1,13 +1,13 @@
 {
   "id": "memory",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "title": {
     "en": "Memory",
     "zh": "记忆"
   },
   "description": {
-    "en": "Play Memory Ladder for coins and badges, climbing up to 20 digits, then practice the Major System with numbers, words and playing cards.",
-    "zh": "玩记忆阶梯赢金币和徽章，一路记到 20 位数字；再用数字、单词和扑克牌练习数字编码法。"
+    "en": "Play Number Ladder (up to 20 digits) and Card Ladder (a whole shuffled deck, faster each rung) for coins and badges, then practice the Major System with numbers, words and playing cards.",
+    "zh": "玩数字阶梯（最多 20 位数字）和扑克牌阶梯（整副洗好的牌，一级比一级快）赢金币和徽章；再用数字、单词和扑克牌练习数字编码法。"
   },
   "entry": "index.html",
   "badges": [
@@ -16,8 +16,8 @@
       "tier": "bronze",
       "level": 5,
       "title": {
-        "en": "Recall 5 digits on Memory Ladder",
-        "zh": "在记忆阶梯记住 5 位数字"
+        "en": "Recall 5 digits on Number Ladder",
+        "zh": "在数字阶梯记住 5 位数字"
       }
     },
     {
@@ -25,8 +25,8 @@
       "tier": "bronze",
       "level": 8,
       "title": {
-        "en": "Recall 8 digits on Memory Ladder",
-        "zh": "在记忆阶梯记住 8 位数字"
+        "en": "Recall 8 digits on Number Ladder",
+        "zh": "在数字阶梯记住 8 位数字"
       }
     },
     {
@@ -34,8 +34,8 @@
       "tier": "silver",
       "level": 10,
       "title": {
-        "en": "Recall 10 digits on Memory Ladder",
-        "zh": "在记忆阶梯记住 10 位数字"
+        "en": "Recall 10 digits on Number Ladder",
+        "zh": "在数字阶梯记住 10 位数字"
       }
     },
     {
@@ -43,8 +43,8 @@
       "tier": "silver",
       "level": 12,
       "title": {
-        "en": "Recall 12 digits on Memory Ladder",
-        "zh": "在记忆阶梯记住 12 位数字"
+        "en": "Recall 12 digits on Number Ladder",
+        "zh": "在数字阶梯记住 12 位数字"
       }
     },
     {
@@ -52,8 +52,8 @@
       "tier": "gold",
       "level": 15,
       "title": {
-        "en": "Recall 15 digits on Memory Ladder",
-        "zh": "在记忆阶梯记住 15 位数字"
+        "en": "Recall 15 digits on Number Ladder",
+        "zh": "在数字阶梯记住 15 位数字"
       }
     },
     {
@@ -61,8 +61,8 @@
       "tier": "diamond",
       "level": 20,
       "title": {
-        "en": "Recall 20 digits on Memory Ladder",
-        "zh": "在记忆阶梯记住 20 位数字"
+        "en": "Recall 20 digits on Number Ladder",
+        "zh": "在数字阶梯记住 20 位数字"
       }
     },
     {
@@ -90,6 +90,60 @@
       "title": {
         "en": "Go through all 52 cards",
         "zh": "练完全部 52 张牌"
+      }
+    },
+    {
+      "id": "card-5s",
+      "tier": "bronze",
+      "icon": "star",
+      "title": {
+        "en": "Recall a whole deck at 5 seconds a card",
+        "zh": "每张 5 秒，记住整副牌"
+      }
+    },
+    {
+      "id": "card-2s",
+      "tier": "silver",
+      "icon": "bolt",
+      "title": {
+        "en": "Recall a whole deck at 2 seconds a card",
+        "zh": "每张 2 秒，记住整副牌"
+      }
+    },
+    {
+      "id": "card-1s",
+      "tier": "gold",
+      "icon": "bolt",
+      "title": {
+        "en": "Recall a whole deck at 1 second a card",
+        "zh": "每张 1 秒，记住整副牌"
+      }
+    },
+    {
+      "id": "card-half",
+      "tier": "diamond",
+      "icon": "crown",
+      "title": {
+        "en": "Recall a whole deck at half a second a card",
+        "zh": "每张半秒，记住整副牌"
+      }
+    },
+    {
+      "id": "card-run-13",
+      "tier": "bronze",
+      "icon": "target",
+      "title": {
+        "en": "Recall 13 cards in a row on Card Ladder",
+        "zh": "在扑克牌阶梯连续记对 13 张"
+      }
+    },
+    {
+      "id": "card-run-26",
+      "tier": "silver",
+      "icon": "target",
+      "title": {
+        "en": "Recall 26 cards in a row on Card Ladder",
+        "zh": "在扑克牌阶梯连续记对 26 张"
       }
     }
   ]

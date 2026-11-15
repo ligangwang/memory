@@ -960,3 +960,74 @@ html[lang="zh-CN"] .eyebrow {
     opacity: 0;
   }
 }
+
+/* Card Ladder */
+.card-stage,
+.card-review {
+  display: grid;
+  place-items: center;
+  min-height: 248px;
+}
+.card-review .playing-card {
+  width: 110px;
+  height: auto;
+}
+.card-progress {
+  width: 100%;
+  max-width: 260px;
+  accent-color: #d5ff58;
+}
+.card-trail {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  min-height: 34px;
+  margin: 10px 0;
+}
+.mini-card,
+.card-picker button {
+  font-variant-numeric: tabular-nums;
+  background: #f3f4f8;
+  color: #192119;
+  border-radius: 6px;
+  font-weight: 700;
+}
+.mini-card {
+  padding: 6px 8px;
+  font-size: 14px;
+}
+.mini-card.red,
+.card-row.red button {
+  color: #c4213a;
+}
+.card-picker {
+  display: grid;
+  gap: 6px;
+}
+.card-row {
+  display: grid;
+  grid-template-columns: repeat(13, minmax(0, 1fr));
+  gap: 4px;
+}
+.card-picker button {
+  padding: 8px 0;
+  font-size: 13px;
+  min-width: 0;
+}
+.card-picker button:disabled {
+  opacity: 0.18;
+}
+@media (max-width: 560px) {
+  .card-row {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+  .card-picker button {
+    padding: 10px 0;
+  }
+}
+@media (max-width: 760px) {
+  /* Keep the cards on screen while a round is under way. */
+  .card-ladder.playing .warmup-copy {
+    display: none;
+  }
+}
