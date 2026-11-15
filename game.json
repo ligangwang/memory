@@ -1,0 +1,96 @@
+{
+  "id": "memory",
+  "version": "1.0.0",
+  "title": {
+    "en": "Memory",
+    "zh": "记忆"
+  },
+  "description": {
+    "en": "Train your memory: climb Memory Ladder up to 20 digits, and practice the Major System with numbers, words and playing cards.",
+    "zh": "训练记忆力：在记忆阶梯上一路记到 20 位数字，并用数字、单词和扑克牌练习数字编码法。"
+  },
+  "entry": "index.html",
+  "badges": [
+    {
+      "id": "ladder-5",
+      "tier": "bronze",
+      "level": 5,
+      "title": {
+        "en": "Recall 5 digits on Memory Ladder",
+        "zh": "在记忆阶梯记住 5 位数字"
+      }
+    },
+    {
+      "id": "ladder-8",
+      "tier": "bronze",
+      "level": 8,
+      "title": {
+        "en": "Recall 8 digits on Memory Ladder",
+        "zh": "在记忆阶梯记住 8 位数字"
+      }
+    },
+    {
+      "id": "ladder-10",
+      "tier": "silver",
+      "level": 10,
+      "title": {
+        "en": "Recall 10 digits on Memory Ladder",
+        "zh": "在记忆阶梯记住 10 位数字"
+      }
+    },
+    {
+      "id": "ladder-12",
+      "tier": "silver",
+      "level": 12,
+      "title": {
+        "en": "Recall 12 digits on Memory Ladder",
+        "zh": "在记忆阶梯记住 12 位数字"
+      }
+    },
+    {
+      "id": "ladder-15",
+      "tier": "gold",
+      "level": 15,
+      "title": {
+        "en": "Recall 15 digits on Memory Ladder",
+        "zh": "在记忆阶梯记住 15 位数字"
+      }
+    },
+    {
+      "id": "ladder-20",
+      "tier": "diamond",
+      "level": 20,
+      "title": {
+        "en": "Recall 20 digits on Memory Ladder",
+        "zh": "在记忆阶梯记住 20 位数字"
+      }
+    },
+    {
+      "id": "daily-climb",
+      "tier": "bronze",
+      "icon": "clock",
+      "title": {
+        "en": "Finish a daily challenge",
+        "zh": "完成一次每日挑战"
+      }
+    },
+    {
+      "id": "first-favorite",
+      "tier": "bronze",
+      "icon": "heart",
+      "title": {
+        "en": "Pick a favorite word for a number",
+        "zh": "为一个数字选出最爱的单词"
+      }
+    },
+    {
+      "id": "full-deck",
+      "tier": "silver",
+      "icon": "crown",
+      "title": {
+        "en": "Go through all 52 cards",
+        "zh": "练完全部 52 张牌"
+      }
+    }
+  ]
+}
