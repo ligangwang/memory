@@ -237,6 +237,45 @@ h3 {
   border-radius: 20px;
   padding: 8px 12px;
 }
+.memory-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 28px;
+  margin: 20px 0;
+}
+.tab-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.tab-group-practice {
+  border-left: 1px solid var(--line);
+  padding-left: 28px;
+}
+@media (max-width: 560px) {
+  .tab-group-practice {
+    border-left: 0;
+    padding-left: 0;
+  }
+}
+.tab-group-label {
+  margin: 0;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.tab-group-label strong {
+  color: var(--green);
+  margin-right: 6px;
+}
+.tab-group-label span {
+  text-transform: none;
+  letter-spacing: 0;
+}
+.memory-tabs .digit-tabs {
+  margin: 0;
+}
 .digit-tabs {
   display: flex;
   gap: 6px;
