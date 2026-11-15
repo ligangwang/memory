@@ -20,7 +20,7 @@ test("saves are read defensively", () => {
     parse({ best: 9, favorites: { "07": "sock", x: "bad", "1": "" } }),
     { ...none, best: 9, favorites: { "07": "sock" } },
   );
-  assert.deepEqual(parse({ best: 99, cards: 10, cardRun: 53 }), none);
+  assert.deepEqual(parse({ best: 99, cards: 12, cardRun: 53 }), none);
   assert.deepEqual(parse({ cards: 3, cardRun: 52 }), {
     ...none,
     cards: 3,
@@ -108,5 +108,5 @@ test("card ladder badges follow speed and run, and exist in game.json", () => {
     "card-run-26",
   ]);
   const declared = new Set(game.badges.map((b) => b.id));
-  for (const id of cardBadges(0.5, 52)) assert.ok(declared.has(id), id);
+  for (const id of cardBadges(0.2, 52)) assert.ok(declared.has(id), id);
 });

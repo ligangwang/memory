@@ -13,6 +13,7 @@ export const CARD_SPEEDS: [number, string][] = [
   [2, "card-2s"],
   [1, "card-1s"],
   [0.5, "card-half"],
+  [0.2, "card-fifth"],
 ];
 /** …and for recalling this many cards in a row. */
 export const CARD_RUNS: [number, string][] = [

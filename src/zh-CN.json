@@ -162,7 +162,7 @@
   "Card Ladder": "扑克牌阶梯",
   "Can you hold": "你能记住",
   "a whole deck?": "一整副牌吗？",
-  "A shuffled deck appears one card at a time. Then pick the 52 cards back in the same order. Get the whole deck right and the cards speed up, from 5 seconds each down to half a second. A wrong card ends the round; three misses end the climb.": "洗好的一副牌会一张一张地出现，然后按同样的顺序选回这 52 张牌。整副牌全对，出牌就会变快：从每张 5 秒一直到每张半秒。选错一张这一轮就结束，失误三次挑战结束。",
+  "A shuffled deck appears one card at a time. Then pick the 52 cards back in the same order. Get the whole deck right and the cards speed up, from 5 seconds each down to a fifth of a second. A wrong card ends the round; three misses end the climb.": "洗好的一副牌会一张一张地出现，然后按同样的顺序选回这 52 张牌。整副牌全对，出牌就会变快：从每张 5 秒一直到每张 0.2 秒。选错一张这一轮就结束，失误三次挑战结束。",
   "a full deck at {0} a card": "每张 {0} 记住整副牌",
   "{0} cards in a row": "连续 {0} 张",
   "Seconds per card": "每张牌的秒数",

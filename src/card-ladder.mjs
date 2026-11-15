@@ -3,7 +3,7 @@
  * recall it in order. Each rung shows the cards for less time.
  */
 /** Seconds each card is shown, one rung after another. */
-export const CARD_RUNGS = [5, 4, 3, 2.5, 2, 1.5, 1, 0.75, 0.5];
+export const CARD_RUNGS = [5, 4, 3, 2.5, 2, 1.5, 1, 0.75, 0.5, 0.3, 0.2];
 /** Misses allowed before the climb ends. */
 export const CARD_LIVES = 3;
 /** Most rounds a climb can take: every rung plus every miss but the last. */

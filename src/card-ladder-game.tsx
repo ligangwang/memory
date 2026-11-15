@@ -1,6 +1,6 @@
 // Card Ladder: a shuffled deck is shown one card at a time; recall it in
-// order. Each rung shows the cards for less time, from 5 seconds down to half
-// a second.
+// order. Each rung shows the cards for less time, from 5 seconds down to 0.2
+// seconds.
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   CARD_LIVES,
@@ -203,7 +203,7 @@ export function CardLadder() {
           </h2>
           <p>
             {t(
-              "A shuffled deck appears one card at a time. Then pick the 52 cards back in the same order. Get the whole deck right and the cards speed up, from 5 seconds each down to half a second. A wrong card ends the round; three misses end the climb.",
+              "A shuffled deck appears one card at a time. Then pick the 52 cards back in the same order. Get the whole deck right and the cards speed up, from 5 seconds each down to a fifth of a second. A wrong card ends the round; three misses end the climb.",
             )}
           </p>
           <p className="ladder-best">

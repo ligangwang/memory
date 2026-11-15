@@ -2,7 +2,7 @@
 
 Memory games for [dingn](https://dingn.com). Play **Number Ladder** (recall
 3 up to 20 digits) and **Card Ladder** (recall a whole shuffled deck in order,
-shown faster each rung, from 5 seconds a card down to half a second), and
+shown faster each rung, from 5 seconds a card down to 0.2 seconds), and
 practice the Major System in three labs, **Numbers**, **Words** and **Cards**. Play it at <https://dingn.com/play/memory/>.
 
 Memory is published on dingn the same way as any outside developer's game: a
