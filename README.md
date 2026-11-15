@@ -1,8 +1,9 @@
 # Memory
 
-Memory games for [dingn](https://dingn.com): climb **Memory Ladder** from 3
-up to 20 digits, and practice the Major System in three labs, **Numbers**,
-**Words** and **Cards**. Play it at <https://dingn.com/play/memory/>.
+Memory games for [dingn](https://dingn.com). Play **Number Ladder** (recall
+3 up to 20 digits) and **Card Ladder** (recall a whole shuffled deck in order,
+shown faster each rung, from 5 seconds a card down to half a second), and
+practice the Major System in three labs, **Numbers**, **Words** and **Cards**. Play it at <https://dingn.com/play/memory/>.
 
 Memory is published on dingn the same way as any outside developer's game: a
 zip uploaded on [My games](https://dingn.com/developers/games/) and approved in
@@ -20,12 +21,16 @@ To play it inside dingn while developing, open the
 [playground](https://dingn.com/developers/playground/) and load
 `http://localhost:5173/`.
 
-Open a lab directly with `#number`, `#word` or `#card` in the address.
+Open a tab directly with `#ladder`, `#card-ladder`, `#number`, `#word` or
+`#card` in the address.
 
 ## What's where
 
-- `src/ladder-game.tsx`, `src/ladder.mjs`: Memory Ladder and its rules. The
+- `src/ladder-game.tsx`, `src/ladder.mjs`: Number Ladder and its rules. The
   daily challenge gives everyone the same sequences for each UTC day.
+- `src/card-ladder-game.tsx`, `src/card-ladder.mjs`: Card Ladder and its
+  rules. A wrong card ends the round; three misses end the climb. Its daily
+  challenge gives everyone the same decks.
 - `src/practice.tsx`, `src/library.ts`: the Number, Word and Card labs.
 - `public/data/`: the Major System library, exported once from dingn's
   Firestore (`numbers.json`, `words/<first letter>.json`, `index.json`).
@@ -33,9 +38,11 @@ Open a lab directly with `#number`, `#word` or `#card` in the address.
 - `src/save.ts`: the best climb and favorite words. Saved on the device with
   `sdk.storage`, and to the player's account with `sdk.progress` when signed
   in. Favorites from dingn's old labs were moved into that account progress.
-- `src/badges.ts` and `game.json`: badges for ladder lengths, a daily
-  challenge, a first favorite and a full deck. A finished climb also pays
-  1 coin per correct round (up to 10) through `sdk.rewards.earn`.
+- `src/badges.ts` and `game.json`: badges for ladder lengths, Card Ladder
+  speeds and runs, a daily challenge, a first favorite and a full deck. A
+  finished Number Ladder climb pays 1 coin per correct round, and a Card
+  Ladder climb 2 per rung cleared plus 1 per 13 cards in a row (up to 10
+  each) through `sdk.rewards.earn`.
 
 ## Release a new version
 

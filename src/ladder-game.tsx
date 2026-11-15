@@ -1,4 +1,4 @@
-// Memory Ladder: remember a growing sequence of digits, from 3 up to 20.
+// Number Ladder: remember a growing sequence of digits, from 3 up to 20.
 import { useEffect, useRef, useState } from "react";
 import {
   dailyLadder,
@@ -121,7 +121,7 @@ export function Ladder() {
   }, [phase]);
   const last = result.rounds.at(-1);
   const shareText = t(
-    `Memory Ladder${daily ? ` · ${day} UTC` : ""}: ${result.best} digits recalled. Can you beat it? https://dingn.com/play/memory/`,
+    `Number Ladder${daily ? ` · ${day} UTC` : ""}: ${result.best} digits recalled. Can you beat it? https://dingn.com/play/memory/`,
   );
   async function share() {
     try {
@@ -132,9 +132,9 @@ export function Ladder() {
     }
   }
   return (
-    <section className="warmup ladder" aria-label={t("Memory Ladder")}>
+    <section className="warmup ladder" aria-label={t("Number Ladder")}>
       <div className="warmup-top">
-        <span className="eyebrow">{t("MEMORY LADDER")}</span>
+        <span className="eyebrow">{t("NUMBER LADDER")}</span>
         <span className="live-dot">
           {t(
             sdk.player.signedIn ? "PLAY FOR COINS" : "PLAY WITHOUT SIGNING IN",
