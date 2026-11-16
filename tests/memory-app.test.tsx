@@ -13,6 +13,7 @@ import { DingnProvider } from "../src/dingn";
 import { MemoryProvider } from "../src/memory-state";
 import { MemoryApp } from "../src/app";
 import { cardDecks } from "../src/card-ladder.mjs";
+import { seededLadder } from "../src/ladder.mjs";
 import { deck } from "../src/library";
 
 const DATA: Record<string, unknown> = {
@@ -56,6 +57,12 @@ function fakeSdk(signedIn: boolean, locale: Locale = "en") {
     requestSignIn: vi.fn(),
     navigate: vi.fn(),
     ready: vi.fn(),
+    challenge: null as DingnGame["challenge"],
+    challengeLink: vi.fn(
+      async (c: { mode: string; score: number }) =>
+        `https://dingn.com/play/memory/?challenge=${c.mode}&score=${c.score}`,
+    ),
+    roundEnded: vi.fn(),
   };
   return { sdk: sdk as unknown as DingnGame, device, raw: sdk };
 }
@@ -208,6 +215,56 @@ test("a finished climb pays coins and saves the best", async () => {
     cardRun: 0,
     favorites: {},
   });
+  vi.useRealTimers();
+});
+
+test("a friend's challenge replays the same digits and compares scores", async () => {
+  vi.useFakeTimers({ shouldAdvanceTime: true });
+  const writeText = vi.fn(async () => {});
+  vi.stubGlobal("navigator", { ...navigator, clipboard: { writeText } });
+  const { sdk, raw } = fakeSdk(false);
+  raw.challenge = {
+    mode: "ladder",
+    seed: "2026-11-16",
+    score: 5,
+    unit: "digits",
+  };
+  show(sdk);
+  expect(screen.getByRole("heading", { name: "Beat 5 digits" })).toBeTruthy();
+  fireEvent.click(screen.getByRole("button", { name: "Take the challenge →" }));
+  const first = await screen.findByLabelText(/^Remember /);
+  expect(first.getAttribute("aria-label")!.replace(/\D/g, "")).toBe(
+    seededLadder("2026-11-16")[0].slice(0, 3),
+  );
+  // One right answer, then three misses.
+  for (let round = 0; round < 4; round++) {
+    const slots = await screen.findByLabelText(/^Remember /);
+    const digits = slots.getAttribute("aria-label")!.replace(/\D/g, "");
+    await vi.advanceTimersByTimeAsync(digits.length * 1000 + 300);
+    const input = await screen.findByLabelText(/What were the/);
+    const wrong = digits.replace(/\d/g, (d) => String((Number(d) + 1) % 10));
+    fireEvent.change(input, { target: { value: round ? wrong : digits } });
+    fireEvent.click(screen.getByRole("button", { name: "Check answer →" }));
+    if (round < 3)
+      fireEvent.click(
+        await screen.findByRole("button", { name: "Next round →" }),
+      );
+  }
+  fireEvent.click(await screen.findByRole("button", { name: "See results →" }));
+  await screen.findByText("2 short of your friend.");
+  expect(screen.getByText("You: 3 digits · Friend: 5 digits")).toBeTruthy();
+  expect(raw.roundEnded).toHaveBeenCalledTimes(1);
+  fireEvent.click(screen.getByRole("button", { name: "Challenge a friend" }));
+  await screen.findByText("Challenge link copied. Send it to a friend!");
+  expect(raw.challengeLink).toHaveBeenCalledWith({
+    mode: "ladder",
+    seed: "2026-11-16",
+    score: 3,
+    unit: "digits",
+  });
+  expect(writeText).toHaveBeenCalledWith(
+    "I recalled 3 digits on the 2026-11-16 Number Ladder. Can you beat me? https://dingn.com/play/memory/?challenge=ladder&score=3",
+  );
   vi.useRealTimers();
 });
 

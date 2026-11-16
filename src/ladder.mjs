@@ -22,8 +22,16 @@ export function ladderSequences(digit) {
 }
 
 export function dailyLadder(day) {
+  return seededLadder(day);
+}
+
+/**
+ * The climb for a seed: a day for the daily challenge, or a random seed for
+ * free play, so a friend's challenge link can replay the very same digits.
+ */
+export function seededLadder(key) {
   let seed = 2166136261;
-  for (const char of `dingn-ladder-v2:${day}`)
+  for (const char of `dingn-ladder-v2:${key}`)
     seed = Math.imul(seed ^ char.charCodeAt(0), 16777619) >>> 0;
   return ladderSequences(() => {
     seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;

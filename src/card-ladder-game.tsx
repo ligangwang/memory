@@ -142,6 +142,7 @@ export function CardLadder() {
 
   /** Pays coins for the climb and unlocks the badges it earned. */
   async function finish(cleared: number, run: number) {
+    sdk.roundEnded?.();
     if (!sdk.player.signedIn) {
       setReward({ kind: "signed-out" });
       return;
