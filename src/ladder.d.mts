@@ -5,6 +5,7 @@ export const LADDER_ROUNDS: number;
 export function ladderLength(index: number): number;
 export function ladderSequences(digit: () => number): string[];
 export function dailyLadder(day: string): string[];
+export function seededLadder(seed: string): string[];
 export function scoreLadder(
   sequences: string[],
   answers: string[],

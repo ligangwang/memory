@@ -1031,3 +1031,16 @@ html[lang="zh-CN"] .eyebrow {
     display: none;
   }
 }
+.challenge-goal {
+  margin: 0 0 6px;
+  font-size: 28px;
+  color: #d5ff58;
+}
+.challenge-result {
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: #ffffff12;
+}
+.challenge-result.won strong {
+  color: #d5ff58;
+}

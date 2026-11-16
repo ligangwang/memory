@@ -1,15 +1,15 @@
 // Number Ladder: remember a growing sequence of digits, from 3 up to 20.
 import { useEffect, useRef, useState } from "react";
 import {
-  dailyLadder,
   LADDER_LIVES,
   LADDER_MAX,
-  ladderSequences,
   scoreLadder,
+  seededLadder,
 } from "./ladder.mjs";
 import { useDingn, useLocale } from "./dingn";
 import { useMemory } from "./memory-state";
 import { badges, DAILY, ladderBadges } from "./badges";
+import { freeSeed, isDay, ladderChallenge, shareChallenge } from "./challenge";
 type Phase = "ready" | "memorize" | "recall" | "round" | "done";
 type Reward =
   | { kind: "none" }
@@ -28,6 +28,11 @@ export function Ladder() {
 
   const [daily, setDaily] = useState(false);
   const [day, setDay] = useState("");
+  // A friend's challenge from the link that opened the game: the same climb,
+  // and their score to beat.
+  const [challenge, setChallenge] = useState(() => ladderChallenge(sdk));
+  // The climb's seed, so "Challenge a friend" can replay the same digits.
+  const [seed, setSeed] = useState("");
   const [phase, setPhase] = useState<Phase>("ready");
   const [sequences, setSequences] = useState<string[]>([]);
   const [answers, setAnswers] = useState<string[]>([]);
@@ -51,10 +56,10 @@ export function Ladder() {
     if (starting) return;
     setStarting(true);
     const today = new Date().toISOString().slice(0, 10);
-    const random = () =>
-      ladderSequences(() => crypto.getRandomValues(new Uint32Array(1))[0] % 10);
-    setDay(today);
-    setSequences(daily ? dailyLadder(today) : random());
+    const next = challenge ? challenge.seed : daily ? today : freeSeed();
+    setSeed(next);
+    setDay(isDay(next) ? next : "");
+    setSequences(seededLadder(next));
     setReward({ kind: "none" });
     setAnswers([]);
     setShareMessage("");
@@ -76,6 +81,7 @@ export function Ladder() {
   }
   /** Pays coins for the climb and unlocks the badges it earned. */
   async function finish(score: number, reached: number) {
+    sdk.roundEnded?.();
     if (!sdk.player.signedIn) {
       setReward({ kind: "signed-out" });
       return;
@@ -89,7 +95,7 @@ export function Ladder() {
     setReward({ kind: "paid", coins });
     await badges.unlock(sdk, [
       ...ladderBadges(reached),
-      ...(daily ? [DAILY] : []),
+      ...(daily || (challenge && challenge.seed === day) ? [DAILY] : []),
     ]);
   }
   useEffect(() => {
@@ -121,15 +127,29 @@ export function Ladder() {
   }, [phase]);
   const last = result.rounds.at(-1);
   const shareText = t(
-    `Number Ladder${daily ? ` · ${day} UTC` : ""}: ${result.best} digits recalled. Can you beat it? https://dingn.com/play/memory/`,
+    `Number Ladder${day ? ` · ${day} UTC` : ""}: ${result.best} digits recalled. Can you beat it? https://dingn.com/play/memory/`,
   );
+  const beat = challenge ? result.best - challenge.score : 0;
   async function share() {
-    try {
-      await navigator.clipboard.writeText(shareText);
-      setShareMessage("Result copied. Send it to a friend!");
-    } catch {
-      setShareMessage(shareText);
-    }
+    const outcome = await shareChallenge(
+      sdk,
+      { mode: "ladder", seed, score: result.best, unit: "digits" },
+      t(
+        day
+          ? `I recalled ${result.best} digits on the ${day} Number Ladder. Can you beat me?`
+          : `I recalled ${result.best} digits on Number Ladder. Can you beat me?`,
+      ),
+      shareText,
+    );
+    setShareMessage(
+      outcome === "copied"
+        ? "Challenge link copied. Send it to a friend!"
+        : outcome === "shared"
+          ? "Challenge sent!"
+          : outcome === "cancelled"
+            ? ""
+            : outcome.show,
+    );
   }
   return (
     <section className="warmup ladder" aria-label={t("Number Ladder")}>
@@ -172,7 +192,30 @@ export function Ladder() {
           </ol>
         </div>
         <div className="warmup-play">
-          {phase === "ready" && (
+          {phase === "ready" && challenge && (
+            <>
+              <h3 className="challenge-goal">
+                {t(`Beat ${challenge.score} digits`)}
+              </h3>
+              <p>
+                {t(
+                  isDay(challenge.seed)
+                    ? `A friend recalled ${challenge.score} digits on the ${challenge.seed} daily challenge. You get the very same digits.`
+                    : `A friend recalled ${challenge.score} digits. You get the very same digits.`,
+                )}
+              </p>
+              <button className="button" disabled={starting} onClick={start}>
+                {t(starting ? "Getting ready…" : "Take the challenge →")}
+              </button>
+              <button
+                className="text-button"
+                onClick={() => setChallenge(null)}
+              >
+                {t("Play my own climb instead")}
+              </button>
+            </>
+          )}
+          {phase === "ready" && !challenge && (
             <>
               <div
                 className="digit-tabs"
@@ -319,6 +362,22 @@ export function Ladder() {
                   `Longest recall: ${result.best} digits · ${result.score} correct rounds`,
                 )}
               </p>
+              {challenge && (
+                <p className={`challenge-result${beat > 0 ? " won" : ""}`}>
+                  <strong>
+                    {t(
+                      beat > 0
+                        ? "You beat your friend!"
+                        : beat === 0
+                          ? "A tie with your friend!"
+                          : `${-beat} short of your friend.`,
+                    )}
+                  </strong>{" "}
+                  {t(
+                    `You: ${result.best} digits · Friend: ${challenge.score} digits`,
+                  )}
+                </p>
+              )}
               <p>
                 {t(
                   result.score && result.best < LADDER_MAX
@@ -351,11 +410,18 @@ export function Ladder() {
                   {t(starting ? "Getting ready…" : "Play again →")}
                 </button>
                 <button className="secondary-button" onClick={share}>
-                  {t("Share result")}
+                  {t(
+                    challenge && beat > 0
+                      ? "Send it back"
+                      : "Challenge a friend",
+                  )}
                 </button>
                 <button
                   className="text-button"
-                  onClick={() => setPhase("ready")}
+                  onClick={() => {
+                    setChallenge(null);
+                    setPhase("ready");
+                  }}
                 >
                   {t("Choose challenge")}
                 </button>

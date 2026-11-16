@@ -186,5 +186,21 @@
   "Fastest full deck: {0} a card · most in a row: {1} cards": "最快整副：每张 {0} · 最多连续：{1} 张",
   "Most cards in a row: {0}": "最多连续：{0} 张",
   "Try linking each card to a word, then chaining the pictures into a story.": "试着把每张牌联想成一个单词，再把画面串成一个故事。",
-  "Card Ladder{0}: {1}. Can you beat it? https://dingn.com/play/memory/#card-ladder": "扑克牌阶梯{0}：{1}。你能超过吗？https://dingn.com/play/memory/#card-ladder"
+  "Card Ladder{0}: {1}. Can you beat it? https://dingn.com/play/memory/#card-ladder": "扑克牌阶梯{0}：{1}。你能超过吗？https://dingn.com/play/memory/#card-ladder",
+  "Beat {0} digits": "超过 {0} 位数字",
+  "A friend recalled {0} digits on the {1} daily challenge. You get the very same digits.": "朋友在 {1} 的每日挑战中记住了 {0} 位数字。你会拿到一模一样的数字。",
+  "A friend recalled {0} digits. You get the very same digits.": "朋友记住了 {0} 位数字。你会拿到一模一样的数字。",
+  "Take the challenge →": "接受挑战 →",
+  "Play my own climb instead": "改玩我自己的阶梯",
+  "You beat your friend!": "你赢过了朋友！",
+  "A tie with your friend!": "和朋友打成平手！",
+  "{0} short of your friend.": "比朋友少 {0} 位。",
+  "You: {0} digits · Friend: {1} digits": "你：{0} 位数字 · 朋友：{1} 位数字",
+  "Send it back": "发回去挑战",
+  "Challenge a friend": "挑战好友",
+  "I recalled {0} digits on the {1} Number Ladder. Can you beat me?": "我在 {1} 的数字阶梯记住了 {0} 位数字，你能超过我吗？",
+  "I recalled {0} digits on Number Ladder. Can you beat me?": "我在数字阶梯记住了 {0} 位数字，你能超过我吗？",
+  "Challenge link copied. Send it to a friend!": "挑战链接已复制，发给朋友吧！",
+  "Challenge sent!": "挑战已发出！",
+  "Number Ladder{0}: {1} digits recalled. Can you beat it? https://dingn.com/play/memory/": "数字阶梯{0}：记住了 {1} 位数字。你能超过吗？https://dingn.com/play/memory/"
 }

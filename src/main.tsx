@@ -6,6 +6,7 @@ import { DingnProvider } from "./dingn";
 import { MemoryProvider } from "./memory-state";
 import { MemoryApp, isTab } from "./app";
 import { loadSaved } from "./save";
+import { ladderChallenge } from "./challenge";
 
 const sdk = await connect();
 document.documentElement.lang = sdk.locale;
@@ -17,7 +18,16 @@ createRoot(document.getElementById("root")!).render(
   <DingnProvider sdk={sdk}>
     <MemoryProvider initial={saved}>
       <MemoryApp
-        initialTab={location.hash ? undefined : isTab(tab) ? tab : undefined}
+        initialTab={
+          // A friend's Number Ladder challenge opens on the ladder.
+          ladderChallenge(sdk)
+            ? "ladder"
+            : location.hash
+              ? undefined
+              : isTab(tab)
+                ? tab
+                : undefined
+        }
       />
     </MemoryProvider>
   </DingnProvider>,
