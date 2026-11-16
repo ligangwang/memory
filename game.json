@@ -1,6 +1,6 @@
 {
   "id": "memory",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "title": {
     "en": "Memory",
     "zh": "记忆"
@@ -10,6 +10,7 @@
     "zh": "玩数字阶梯（最多 20 位数字）和扑克牌阶梯（整副洗好的牌，一级比一级快）赢金币和徽章；再用数字、单词和扑克牌练习数字编码法。"
   },
   "entry": "index.html",
+  "cover": "cover.jpg",
   "badges": [
     {
       "id": "ladder-5",
