@@ -1,14 +1,25 @@
 {
   "id": "memory",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "title": {
     "en": "Memory",
-    "zh": "记忆"
+    "zh": "记忆",
+    "es": "Memoria",
+    "pt-BR": "Memória",
+    "id": "Memori",
+    "ja": "記憶",
+    "ko": "기억력"
   },
   "description": {
     "en": "Play Number Ladder (up to 20 digits) and Card Ladder (a whole shuffled deck, faster each rung) for coins and badges, then practice the Major System with numbers, words and playing cards.",
-    "zh": "玩数字阶梯（最多 20 位数字）和扑克牌阶梯（整副洗好的牌，一级比一级快）赢金币和徽章；再用数字、单词和扑克牌练习数字编码法。"
+    "zh": "玩数字阶梯（最多 20 位数字）和扑克牌阶梯（整副洗好的牌，一级比一级快）赢金币和徽章；再用数字、单词和扑克牌练习数字编码法。",
+    "es": "Juega a Number Ladder (hasta 20 dígitos) y Card Ladder (una baraja entera mezclada, más rápida en cada peldaño) para ganar monedas e insignias; después practica el Major System con números, palabras y cartas.",
+    "pt-BR": "Jogue Number Ladder (até 20 dígitos) e Card Ladder (um baralho inteiro embaralhado, mais rápido a cada degrau) para ganhar moedas e medalhas; depois treine o Major System com números, palavras e cartas de baralho.",
+    "id": "Mainkan Number Ladder (sampai 20 digit) dan Card Ladder (satu dek kocok penuh, makin cepat di setiap anak tangga) untuk mendapat koin dan lencana, lalu latih Major System dengan angka, kata, dan kartu remi.",
+    "ja": "Number Ladder（最大20桁）と Card Ladder（シャッフルしたトランプ1組、段ごとにスピードアップ）でコインとバッジを獲得。Major System を数字・単語・トランプで練習できます。",
+    "ko": "Number Ladder(최대 20자리)와 Card Ladder(섞인 카드 한 벌, 단계마다 더 빨라져요)로 코인과 배지를 모아 보세요. 숫자, 단어, 트럼프 카드로 Major System도 연습할 수 있어요."
   },
+  "languages": ["en", "zh-CN", "es", "pt-BR", "id", "ja", "ko"],
   "entry": "index.html",
   "cover": "cover.jpg",
   "badges": [

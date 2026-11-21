@@ -174,7 +174,7 @@ h3 {
   margin: 0;
   color: var(--muted);
   font-size: 11px;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }
 .error {
   background: #fff0ed;
@@ -330,7 +330,7 @@ h3 {
 .exercise {
   min-height: 380px;
   padding: 32px;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }
 .exercise-loading {
   min-height: 320px;
@@ -899,8 +899,16 @@ h3,
 .ladder .digit-slots > span {
   animation: none;
 }
-html[lang="zh-CN"] .eyebrow {
+/* Chinese, Japanese and Korean have no capitals to space out. */
+html[lang="zh-CN"] .eyebrow,
+html[lang="ja"] .eyebrow,
+html[lang="ko"] .eyebrow {
   letter-spacing: 0.12em;
+}
+/* Korean wraps between words, not inside them. */
+html[lang="ko"] body {
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 .mind-page > .game-badge + .eyebrow {
   margin-top: 16px;

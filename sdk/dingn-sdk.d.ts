@@ -1,5 +1,19 @@
 export declare const PROTOCOL: 1;
-export type Locale = "en" | "zh-CN";
+/**
+ * A language: "en", "zh-CN", "es", "pt-BR", "id", "ja", "ko", or another
+ * dingn adds later. A game gets only languages its game.json `languages`
+ * lists (English and Chinese for games that list none), so it can show any
+ * code it receives.
+ */
+export type Locale =
+  | "en"
+  | "zh-CN"
+  | "es"
+  | "pt-BR"
+  | "id"
+  | "ja"
+  | "ko"
+  | (string & {});
 export type Player = { signedIn: boolean; name: string; avatar: string };
 export type Json =
   null | boolean | number | string | Json[] | { [key: string]: Json };
@@ -64,6 +78,19 @@ export type Challenge = {
   /** A whole number from 0 to 1,000,000,000. */
   score: number;
   unit: ChallengeUnit;
+  /**
+   * The rules the round was played with, in the game's own terms (1-64
+   * letters, digits, dots, dashes or underscores), such as the upgrades and
+   * helpers the player had, so the friend can play under exactly the same
+   * ones. dingn saves it with the challenge and gives it back unchanged.
+   */
+  rules?: string;
+  /**
+   * In `dingn.challenge` only: true when the player opening the link is the
+   * one who made it (signed in to the same account, or in the same browser).
+   * Then it is their own score to beat, not a friend's.
+   */
+  mine?: boolean;
 };
 export type DingnGame = {
   gameId: string;
@@ -73,6 +100,12 @@ export type DingnGame = {
   /** False when the game was opened on its own, outside dingn. */
   embedded: boolean;
   onPlayer(listener: (player: Player) => void): () => void;
+  /**
+   * Called when the player switches language while playing, with the new
+   * language (one the game lists). Show your text and pictures in it and
+   * keep the player's game going. Returns a function that stops listening.
+   */
+  onLanguage(listener: (locale: Locale) => void): () => void;
   /** Saved on this device only. Keys: letters, digits, `._-`, up to 64. Values up to 16 KB as JSON. */
   storage: {
     get(key: string): Promise<Json>;
@@ -93,7 +126,9 @@ export type DingnGame = {
      * Buys an upgrade from game.json's `shop` with the player's dingn coins.
      * dingn asks the player to confirm first. Rejects with code "cancelled"
      * (the player said no), "not_enough_coins", "requires" (buy the upgrade
-     * it requires first) or "signed_out".
+     * it requires first) or "signed_out". A "not_enough_coins" error also
+     * carries `balance`, the coins the player has, so the game can show how
+     * many more they need.
      */
     spend(id: string): Promise<Purchase>;
     shop(): Promise<ShopItem[]>;

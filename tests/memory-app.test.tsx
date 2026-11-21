@@ -30,13 +30,23 @@ const DATA: Record<string, unknown> = {
 function fakeSdk(signedIn: boolean, locale: Locale = "en") {
   const device = new Map<string, Json>();
   let account: Json = null;
+  const languageListeners = new Set<(locale: Locale) => void>();
   const sdk = {
+    /** dingn telling the game the player switched language. */
+    switchLanguage: (next: Locale) => {
+      for (const fn of languageListeners) fn(next);
+    },
+    languageListeners,
     gameId: "memory",
     version: "1.0.0",
     locale,
     embedded: true,
     player: { signedIn, name: "Ada", avatar: "" },
     onPlayer: () => () => {},
+    onLanguage: (fn: (locale: Locale) => void) => {
+      languageListeners.add(fn);
+      return () => void languageListeners.delete(fn);
+    },
     storage: {
       get: async (k: string) => device.get(k) ?? null,
       set: async (k: string, v: Json) => void device.set(k, v),
@@ -298,4 +308,49 @@ test("Card Ladder deals a deck one card at a time and checks the order", async (
   } finally {
     vi.useRealTimers();
   }
+});
+
+test("switching language mid-climb redraws in the new language and keeps the climb", async () => {
+  vi.useFakeTimers({ shouldAdvanceTime: true });
+  try {
+    const { sdk, raw } = fakeSdk(false);
+    const view = show(sdk);
+    fireEvent.click(screen.getByRole("button", { name: "Start climbing →" }));
+    const slots = await screen.findByLabelText(/^Remember /);
+    const digits = slots.getAttribute("aria-label")!.replace(/\D/g, "");
+    expect(raw.languageListeners.size).toBe(1);
+
+    act(() => raw.switchLanguage("es"));
+    expect(document.documentElement.lang).toBe("es");
+    expect(screen.getByText("Memoriza la secuencia.")).toBeTruthy();
+    // The very same digits are still up: the climb carried on.
+    const same = screen.getByLabelText(/^Recuerda /);
+    expect(same.getAttribute("aria-label")!.replace(/\D/g, "")).toBe(digits);
+    expect(screen.getByRole("button", { name: "Números" })).toBeTruthy();
+
+    // Recall in Japanese, answer in Korean.
+    act(() => raw.switchLanguage("ja"));
+    await vi.advanceTimersByTimeAsync(digits.length * 1000 + 300);
+    const input = await screen.findByLabelText(`さっきの${digits.length}桁の数字は？`);
+    act(() => raw.switchLanguage("ko"));
+    fireEvent.change(input, { target: { value: digits } });
+    fireEvent.click(screen.getByRole("button", { name: "정답 확인 →" }));
+    await screen.findByText("한 칸 올라갔어요!");
+
+    act(() => raw.switchLanguage("en"));
+    expect(screen.getByRole("button", { name: "Next round →" })).toBeTruthy();
+    expect(document.documentElement.lang).toBe("en");
+
+    view.unmount();
+    expect(raw.languageListeners.size).toBe(0);
+  } finally {
+    vi.useRealTimers();
+  }
+});
+
+test("an older dingn without onLanguage still runs", () => {
+  const { sdk, raw } = fakeSdk(false, "pt-BR");
+  delete (raw as { onLanguage?: unknown }).onLanguage;
+  show(sdk);
+  expect(screen.getByRole("button", { name: "Começar a subir →" })).toBeTruthy();
 });

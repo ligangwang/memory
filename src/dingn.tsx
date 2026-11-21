@@ -22,8 +22,16 @@ export function DingnProvider({
   // Re-render when the player signs in or out.
   const [player, setPlayer] = useState(sdk.player);
   useEffect(() => sdk.onPlayer(setPlayer), [sdk]);
+  // …or switches language while playing: everything redraws in the new
+  // language and the climb or practice carries on. Older dingn builds have no
+  // onLanguage.
+  const [locale, setLocale] = useState(sdk.locale);
+  useEffect(() => sdk.onLanguage?.(setLocale), [sdk]);
+  useEffect(() => {
+    document.documentElement.lang = locale;
+  }, [locale]);
   return (
-    <DingnContext.Provider value={{ ...sdk, player }}>
+    <DingnContext.Provider value={{ ...sdk, player, locale }}>
       {children}
     </DingnContext.Provider>
   );
