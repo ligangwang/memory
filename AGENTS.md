@@ -14,5 +14,8 @@ Notes for AI coding agents working on Memory.
 - Save with `sdk.storage` / `sdk.progress`, never `localStorage` or cookies,
   which the sandbox blocks. Keep every URL relative (`base: "./"`), including
   `./data/` and `./cards/`.
-- UI strings go through `t()` with translations in `src/zh-CN.json`. Word
-  definitions stay in English.
+- UI strings go through `t()`. Memory speaks every language in game.json's
+  `languages`; each one but English has a pack in `src/locales/<lang>.json`
+  mapping the English text to its translation (`{0}` placeholders kept). Add
+  a new string to every pack (a test checks they all have the same keys).
+  Word definitions, the word lists and saved associations stay in English.

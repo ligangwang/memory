@@ -6,7 +6,8 @@
 //
 //   import { connect } from "./dingn-sdk.js";
 //   const dingn = await connect();
-//   dingn.locale;                         // "en" or "zh-CN"
+//   dingn.locale;                         // the player's language, one your game.json lists ("en" if none fits)
+//   dingn.onLanguage((locale) => …);      // the player switched language
 //   dingn.player;                         // { signedIn, name, avatar }
 //   dingn.onPlayer((player) => …);        // sign-in or sign-out
 //   await dingn.storage.set("best", 12);  // this device only
@@ -42,6 +43,7 @@ function connectToHost(host, timeout) {
   let nextId = 1;
   const pending = new Map();
   const listeners = new Set();
+  const languageListeners = new Set();
   let game;
 
   window.addEventListener("message", (event) => {
@@ -58,6 +60,12 @@ function connectToHost(host, timeout) {
       for (const fn of listeners) fn(msg.data);
       return;
     }
+    // The player switched language: show the game in it, keeping their play.
+    if (msg.event === "language") {
+      if (game) game.locale = msg.data;
+      for (const fn of languageListeners) fn(msg.data);
+      return;
+    }
     const call = pending.get(msg.id);
     if (!call) return;
     pending.delete(msg.id);
@@ -66,6 +74,9 @@ function connectToHost(host, timeout) {
       call.reject(
         Object.assign(new Error(msg.error.message || msg.error.code), {
           code: msg.error.code,
+          ...(typeof msg.error.balance === "number"
+            ? { balance: msg.error.balance }
+            : {}),
         }),
       );
     else call.resolve(msg.result);
@@ -101,6 +112,10 @@ function connectToHost(host, timeout) {
       onPlayer(fn) {
         listeners.add(fn);
         return () => listeners.delete(fn);
+      },
+      onLanguage(fn) {
+        languageListeners.add(fn);
+        return () => languageListeners.delete(fn);
       },
       storage: {
         get: (key) => request("storage.get", { key }),
@@ -145,6 +160,7 @@ function standalone() {
     embedded: false,
     challenge: null,
     onPlayer: () => () => {},
+    onLanguage: () => () => {},
     storage: {
       get: async (key) =>
         memory.has(key) ? JSON.parse(memory.get(key)) : null,
